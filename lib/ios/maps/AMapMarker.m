@@ -116,6 +116,7 @@
     if (_annotationView == nil) {
         if (_customView) {
             _customView.hidden = NO;
+            _customView.alpha = 1.0;
             _annotationView = [[MAAnnotationView alloc] initWithAnnotation:_annotation reuseIdentifier:nil];
             _annotationView.bounds = _customView.bounds;
             [_annotationView addSubview:_customView];
@@ -152,6 +153,7 @@
     } else {
         _customView = subview;
         _customView.hidden = YES;
+        _customView.alpha = 0.0;
     }
 }
 
