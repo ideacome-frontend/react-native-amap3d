@@ -12,6 +12,7 @@ import Events from "./events";
 import HeatMap from "./heat-map";
 import MultiPoint from "./multi-point";
 import Offline from "./offline";
+import SmoothMarker from './smooth-marker';
 
 export default {
   地图模式: MapTypes,
@@ -23,6 +24,7 @@ export default {
   地图事件: Events,
   添加标记: Marker,
   绘制折线: Polyline,
+  平滑移动: SmoothMarker,
   绘制多边形: Polygon,
   绘制圆形: Circle,
   热力图: HeatMap,

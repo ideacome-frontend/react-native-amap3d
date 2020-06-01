@@ -73,6 +73,8 @@ export default ({ navigation }) => {
         <View style={style.separator} />
         {renderItem("绘制折线")}
         <View style={style.separator} />
+        {renderItem("平滑移动")}
+        <View style={style.separator} />
         {renderItem("绘制多边形")}
         <View style={style.separator} />
         {renderItem("绘制圆形")}

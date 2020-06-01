@@ -1,4 +1,3 @@
-/// <reference types="react-native" />
 import * as React from "react";
 import * as PropTypes from "prop-types";
 import { LatLng } from "../types";

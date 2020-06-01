@@ -15,6 +15,7 @@ import Polygon from "./polygon";
 import Circle from "./circle";
 import HeatMap from "./heat-map";
 import MultiPoint from "./multi-point";
+import SmoothMoveMarker from "./smooth-marker";
 
 export interface MapViewProps {
   /**
@@ -254,6 +255,7 @@ export default class MapView extends Component<MapViewProps> {
   static Circle = Circle;
   static HeatMap = HeatMap;
   static MultiPoint = MultiPoint;
+  static SmoothMoveMarker = SmoothMoveMarker;
 }
 
 // @ts-ignore
