@@ -7,6 +7,7 @@ export interface SmoothMoveMarkerProps {
      * 坐标集合
      */
     coordinates: LatLng[];
+    bounds?: LatLng[];
     image?: string;
     start?: () => void;
     stop?: () => void;

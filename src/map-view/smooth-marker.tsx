@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as PropTypes from "prop-types";
-import { requireNativeComponent, ViewPropTypes } from "react-native";
+import { requireNativeComponent, ViewPropTypes, Platform } from "react-native";
 import { LatLng } from "../types";
 import { LatLngPropType } from "../prop-types";
 import Component from "./component";
@@ -10,6 +10,7 @@ export interface SmoothMoveMarkerProps {
    * 坐标集合
    */
   coordinates: LatLng[];
+  bounds?:LatLng[];
   image?: string;
   start?: () => void;
   stop?: () => void;
@@ -40,6 +41,11 @@ export default class SmoothMoveMarker extends Component<SmoothMoveMarkerProps>{
     this.call("stop");
   }
   restart(autoStart = false) {
+    if(Platform.OS==='ios'){
+      // ios 默认restart
+      this.call("restart");
+      return;
+    }
     if (autoStart === true) {
       this.call("restart", [1]);
       return;
@@ -49,6 +55,7 @@ export default class SmoothMoveMarker extends Component<SmoothMoveMarkerProps>{
   render() {
     const props = {
       ...this.props,
+      mapBounds:this.props.bounds || [],
       ...this.handlers(events)
     };
     return <AMapSmoothMoveMarker {...props  } />

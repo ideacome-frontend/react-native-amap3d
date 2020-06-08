@@ -3,11 +3,13 @@
 #import "AMapMarker.h"
 #import "AMapPolyline.h"
 #import "LocationStyle.h"
+#import "AMapSmoothMoveMarker.h"
 
 #pragma ide diagnostic ignored "OCUnusedMethodInspection"
 
 @implementation AMapView {
     NSMutableDictionary *_markers;
+    NSMutableDictionary *_smoothmarkers;
     MAUserLocationRepresentation *_locationStyle;
     BOOL _isBoundsInit;
 }
@@ -15,6 +17,7 @@
 - (instancetype)init {
     _isBoundsInit = NO;
     _markers = [NSMutableDictionary new];
+    _smoothmarkers = [NSMutableDictionary new];
     self = [super init];
     return self;
 }
@@ -87,6 +90,14 @@
             [self addAnnotation:marker.annotation];
         });
     }
+    if([subview isKindOfClass:[AMapSmoothMoveMarker class]]){
+        AMapSmoothMoveMarker *smoothmarker = (AMapSmoothMoveMarker *) subview;
+        smoothmarker.mapView = self;
+        _smoothmarkers[[@(smoothmarker.annotation.hash) stringValue]] = smoothmarker;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self addAnnotation:smoothmarker.annotation];
+        });
+    }
     if ([subview isKindOfClass:[AMapOverlay class]]) {
         [self addOverlay:(id <MAOverlay>) subview];
     }
@@ -98,6 +109,11 @@
         AMapMarker *marker = (AMapMarker *) subview;
         [self removeAnnotation:marker.annotation];
     }
+    if ([subview isKindOfClass:[AMapSmoothMoveMarker class]]) {
+        AMapSmoothMoveMarker *smoothmarker = (AMapSmoothMoveMarker *) subview;
+        [self removeAnnotation:smoothmarker.annotation];
+    }
+
     if ([subview isKindOfClass:[AMapOverlay class]]) {
         [self removeOverlay:(id <MAOverlay>) subview];
     }
@@ -105,6 +121,10 @@
 
 - (AMapMarker *)getMarker:(id <MAAnnotation>)annotation {
     return _markers[[@(annotation.hash) stringValue]];
+}
+
+- (AMapSmoothMoveMarker *)getSmoothMarker:(id <MAAnnotation>)annotation {
+    return _smoothmarkers[[@(annotation.hash) stringValue]];
 }
 
 @end

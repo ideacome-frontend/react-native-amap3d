@@ -2,6 +2,7 @@
 #import "AMapView.h"
 #import "AMapMarker.h"
 #import "AMapOverlay.h"
+#import "AMapSmoothMoveMarker.h"
 
 #pragma ide diagnostic ignored "OCUnusedClassInspection"
 #pragma ide diagnostic ignored "-Woverriding-method-mismatch"
@@ -106,6 +107,10 @@ RCT_EXPORT_METHOD(setStatus:(nonnull NSNumber *)reactTag params:(NSDictionary *)
 }
 
 - (MAAnnotationView *)mapView:(AMapView *)mapView viewForAnnotation:(id <MAAnnotation>)annotation {
+    if ([annotation isKindOfClass:[MAAnimatedAnnotation class]]) {
+        AMapSmoothMoveMarker *marker = [mapView getSmoothMarker:annotation];
+        return marker.annotationView;
+    }
     if ([annotation isKindOfClass:[MAPointAnnotation class]]) {
         AMapMarker *marker = [mapView getMarker:annotation];
         return marker.annotationView;

@@ -22,6 +22,11 @@ internal class AMapSmoothMoveMarkerManager : ViewGroupManager<AMapSmoothMoveMark
         )
     }
 
+    @ReactProp(name = "bounds")
+    fun setBounds(smoothMoveMarker: AMapSmoothMoveMarker, coordinates: ReadableArray) {
+        smoothMoveMarker.setBounds(coordinates)
+    }
+
     @ReactProp(name = "coordinates")
     fun setCoordinate(smoothMoveMarker: AMapSmoothMoveMarker, coordinates: ReadableArray) {
         smoothMoveMarker.setCoordinates(coordinates)

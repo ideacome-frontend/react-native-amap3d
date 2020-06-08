@@ -13,7 +13,7 @@ import HeatMap from "./heat-map";
 import MultiPoint from "./multi-point";
 import Offline from "./offline";
 import SmoothMarker from './smooth-marker';
-
+import DrivePath from './drivepath';
 export default {
   地图模式: MapTypes,
   基本图层: Layers,
@@ -25,6 +25,7 @@ export default {
   添加标记: Marker,
   绘制折线: Polyline,
   平滑移动: SmoothMarker,
+  轨迹移动案例:DrivePath,
   绘制多边形: Polygon,
   绘制圆形: Circle,
   热力图: HeatMap,
