@@ -9,6 +9,7 @@
 @implementation AMapSmoothMoveMarker {
     PausableMovingAnnotation *_annotation;//贴图标注
     MAAnnotationView *_annotationView;//标注视图
+    MAAnnotationMoveAnimation *currentStopLoc;//
     MACustomCalloutView *_calloutView;//气泡视图
     NSMutableArray<Coordinate *> *_coordinates;//
     NSMutableArray<Coordinate *> *_mapBounds;//边界
@@ -60,6 +61,7 @@
     if(_annotationView != nil) {
         [_annotation addMoveAnimationWithKeyCoordinates:coords count:coordinates.count withDuration:_duration withName:nil completeCallback:^(BOOL isFinished) {
            }stepCallback:^(MAAnnotationMoveAnimation *currentAni) {
+                currentStopLoc = currentAni;
                if(_enableListen){
                     _onMarkerMove(
                        @{
@@ -108,24 +110,39 @@
     _enableListen = enableListen;
 }
 
-- (void)setStop {    
+- (void)setStop {
+    CLLocationCoordinate2D _stopCor = _annotation.coordinate;
     for(MAAnnotationMoveAnimation *animation in [_annotation allMoveAnimations]) {
         [animation cancel];
     }
-    [_annotation setCoordinate:_coordinates[0].coordinate];
+    [_annotation setCoordinate:_stopCor];
+//    if(currentStopLoc.passedPointCount !=nil && currentStopLoc.passedPointCount>0){
+//        [_annotation setCoordinate:_coordinates[currentStopLoc.passedPointCount-1].coordinate];
+//
 }
 
 - (void)start {
-   CLLocationCoordinate2D coords[_coordinates.count];
-   for (NSUInteger i = 0; i < _coordinates.count; i++) {
-       coords[i] = _coordinates[i].coordinate;
+   
+    NSUInteger temp = 0;
+    if(currentStopLoc.passedPointCount >= 0 && currentStopLoc.passedPointCount<=_coordinates.count){
+        temp = currentStopLoc.passedPointCount;
+    }
+   CLLocationCoordinate2D coords[_coordinates.count - temp + 1];
+    NSLog(@"%i",_coordinates.count - temp + 1);
+   for (NSUInteger i = 0; i < _coordinates.count - temp + 1; i++) {
+       if(i==0){
+           coords[i] = _annotation.coordinate;
+       }else{
+           coords[i] = _coordinates[i + temp -1].coordinate;
+       }
    }
    _annotation.coordinate = coords[0];
    if(_annotationView != nil) {
-       [_annotation addMoveAnimationWithKeyCoordinates:coords count:_coordinates.count withDuration:_duration withName:nil completeCallback:^(BOOL isFinished) {
+       [_annotation addMoveAnimationWithKeyCoordinates:coords count:_coordinates.count - temp + 1 withDuration:(_duration* (_coordinates.count - temp + 1)/_coordinates.count ) withName:nil completeCallback:^(BOOL isFinished) {
 
           }
         stepCallback:^(MAAnnotationMoveAnimation *currentAni) {
+           currentStopLoc = currentAni;
             if(_enableListen){
                  _onMarkerMove(
                     @{
@@ -145,11 +162,23 @@
         coords[i] = _coordinates[i].coordinate;
     }
     _annotation.coordinate = coords[0];
-    if(_annotationView != nil) {
-        [_annotation addMoveAnimationWithKeyCoordinates:coords count:_coordinates.count-1 withDuration:_duration withName:nil completeCallback:^(BOOL isFinished) {
+   if(_annotationView != nil) {
+       [_annotation addMoveAnimationWithKeyCoordinates:coords count:_coordinates.count withDuration:_duration withName:nil completeCallback:^(BOOL isFinished) {
 
-           }];
-    }
+          }
+        stepCallback:^(MAAnnotationMoveAnimation *currentAni) {
+           currentStopLoc = currentAni;
+            if(_enableListen){
+                 _onMarkerMove(
+                    @{
+                         @"latitude": @(_annotation.coordinate.latitude),
+                         @"longitude":@(_annotation.coordinate.longitude),
+                     }
+                 );
+             }
+        }
+        ];
+   }
 }
 
 - (PausableMovingAnnotation *)annotation {
@@ -232,6 +261,7 @@
         [_annotation addMoveAnimationWithKeyCoordinates:coords count:_coordinates.count withDuration:_duration withName:nil completeCallback:^(BOOL isFinished) {
 
           } stepCallback:^(MAAnnotationMoveAnimation *currentAni) {
+               currentStopLoc = currentAni;
               if(_enableListen){
                   _onMarkerMove(
                                  @{
