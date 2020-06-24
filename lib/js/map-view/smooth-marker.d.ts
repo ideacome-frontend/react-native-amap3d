@@ -1,33 +1,31 @@
-import * as React from "react";
+/// <reference types="react" />
 import * as PropTypes from "prop-types";
-import { Point } from "../types";
-export interface MultiPointProps {
+import { LatLng } from "../types";
+import Component from "./component";
+export interface SmoothMoveMarkerProps {
     /**
-     * 节点
+     * 坐标集合
      */
-    points?: Point[];
-    /**
-     * 图标，只接受原生图片名字
-     */
+    coordinates: LatLng[];
+    bounds?: LatLng[];
     image?: string;
-    /**
-     * 点击事件
-     */
-    onItemPress?: (item: Point) => void;
+    start?: () => void;
+    stop?: () => void;
+    restart?: (autoStart: boolean) => void;
+    autoStart?: boolean;
+    enableListen?: boolean;
 }
 /**
  * @ignore
  */
-export default class MultiPoint extends React.PureComponent<MultiPointProps> {
+export default class SmoothMoveMarker extends Component<SmoothMoveMarkerProps> {
     static propTypes: {
-        points: PropTypes.Validator<PropTypes.InferProps<{
+        coordinates: PropTypes.Validator<PropTypes.InferProps<{
             latitude: PropTypes.Validator<number>;
             longitude: PropTypes.Validator<number>;
-            title: PropTypes.Requireable<string>;
-            subtitle: PropTypes.Requireable<string>;
         }>[]>;
         image: PropTypes.Requireable<string>;
-        onItemPress: PropTypes.Requireable<(...args: any[]) => any>;
+        duration: PropTypes.Requireable<number>;
         hitSlop?: PropTypes.Validator<import("react-native").Insets>;
         onLayout?: PropTypes.Validator<(event: import("react-native").LayoutChangeEvent) => void>;
         pointerEvents?: PropTypes.Validator<"auto" | "none" | "box-none" | "box-only">;
@@ -85,8 +83,9 @@ export default class MultiPoint extends React.PureComponent<MultiPointProps> {
         onMagicTap?: PropTypes.Validator<() => void>;
         accessibilityIgnoresInvertColors?: PropTypes.Validator<boolean>;
     };
-    onItemPress: ({ nativeEvent }: {
-        nativeEvent: any;
-    }) => void;
+    nativeComponent: string;
+    start(): void;
+    stop(): void;
+    restart(autoStart?: boolean): void;
     render(): JSX.Element;
 }

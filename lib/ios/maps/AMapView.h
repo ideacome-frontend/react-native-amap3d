@@ -1,6 +1,7 @@
 #import <MAMapKit/MAMapKit.h>
 
 @class AMapMarker;
+@class AMapSmoothMoveMarker;
 
 @interface AMapView : MAMapView
 
@@ -14,5 +15,5 @@
 @property(nonatomic) MACoordinateRegion initialRegion;
 
 - (AMapMarker *)getMarker:(id <MAAnnotation>)annotation;
-
+- (AMapSmoothMoveMarker *)getSmoothMarker:(id <MAAnnotation>)annotation;
 @end

@@ -4,6 +4,7 @@ import Component from "./component";
 import Marker from "./marker";
 import Polyline from "./polyline";
 import MultiPoint from "./multi-point";
+import SmoothMoveMarker from "./smooth-marker";
 export interface MapViewProps {
     /**
      * 地图类型
@@ -160,4 +161,5 @@ export default class MapView extends Component<MapViewProps> {
     static Circle: any;
     static HeatMap: any;
     static MultiPoint: typeof MultiPoint;
+    static SmoothMoveMarker: typeof SmoothMoveMarker;
 }

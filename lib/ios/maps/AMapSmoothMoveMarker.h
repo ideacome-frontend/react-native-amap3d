@@ -1,7 +1,7 @@
 #import "AMapView.h"
 #import "AMapCallout.h"
 
-@interface AMapMarker : UIView
+@interface AMapSmoothMoveMarker : UIView
 
 @property(nonatomic, copy) RCTBubblingEventBlock onPress;
 @property(nonatomic, copy) RCTBubblingEventBlock onInfoWindowPress;
@@ -11,8 +11,11 @@
 @property(nonatomic, copy) RCTBubblingEventBlock onMarkerMove;
 
 - (MAAnnotationView *)annotationView;
-- (MAPointAnnotation *)annotation;
+- (MAAnimatedAnnotation *)annotation;
 - (void)setActive:(BOOL)active;
+- (void)setStop;
+- (void)start;
+- (void)restart;
 - (void)setMapView:(AMapView *)mapView;
 - (void)lockToScreen:(int)x y:(int)y;
 
