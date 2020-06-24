@@ -26,6 +26,8 @@
     BOOL _autoStart;
     NSInteger _zIndex;
     NSInteger _duration; //动画时间
+    NSUInteger temp;
+    CLLocationCoordinate2D _stopCor;
 }
 // MAAnimatedAnnotation
 - (instancetype)init {
@@ -35,6 +37,7 @@
     _enabled = YES;
     _canShowCallout = YES;
     _draggable = NO;
+    temp = 0;
     self = [super init];
     return self;
 }
@@ -118,7 +121,7 @@
 }
 
 - (void)setStop {
-    CLLocationCoordinate2D _stopCor = _annotation.coordinate;
+    _stopCor = _annotation.coordinate;
     for(MAAnnotationMoveAnimation *animation in [_annotation allMoveAnimations]) {
         [animation cancel];
     }
@@ -130,21 +133,33 @@
 
 - (void)start {
    
-    NSUInteger temp = 0;
     if(currentStopLoc.passedPointCount >= 0 && currentStopLoc.passedPointCount<=_coordinates.count){
-        temp = currentStopLoc.passedPointCount;
+        if(temp==0){
+            temp = temp + currentStopLoc.passedPointCount;
+        }else{
+            temp = temp + currentStopLoc.passedPointCount - 1;
+        }
     }
    CLLocationCoordinate2D coords[_coordinates.count - temp + 1];
    for (NSUInteger i = 0; i < _coordinates.count - temp + 1; i++) {
        if(i==0){
-           coords[i] = _annotation.coordinate;
+           if(temp == 0){
+               coords[i] = _annotation.coordinate;
+           }else{
+                coords[i] = _stopCor;
+           }
        }else{
            coords[i] = _coordinates[i + temp -1].coordinate;
        }
    }
+    NSLog(@"%i",_coordinates.count - temp + 1);
    _annotation.coordinate = coords[0];
+    NSInteger tempDurantion = (_duration* (_coordinates.count - temp)/_coordinates.count );
+    if(tempDurantion==0){
+        tempDurantion =1;
+    }
    if(_annotationView != nil) {
-       [_annotation addMoveAnimationWithKeyCoordinates:coords count:_coordinates.count - temp + 1 withDuration:(_duration* (_coordinates.count - temp + 1)/_coordinates.count ) withName:nil completeCallback:^(BOOL isFinished) {
+       [_annotation addMoveAnimationWithKeyCoordinates:coords count:_coordinates.count - temp + 1 withDuration: tempDurantion withName:nil completeCallback:^(BOOL isFinished) {
 
           }
         stepCallback:^(MAAnnotationMoveAnimation *currentAni) {
@@ -167,6 +182,7 @@
     for (NSUInteger i = 0; i < _coordinates.count; i++) {
         coords[i] = _coordinates[i].coordinate;
     }
+    temp = 0;
     _annotation.coordinate = coords[0];
    if(_annotationView != nil && _autoStart) {
        [_annotation addMoveAnimationWithKeyCoordinates:coords count:_coordinates.count withDuration:_duration withName:nil completeCallback:^(BOOL isFinished) {
@@ -323,3 +339,5 @@
 }
 
 @end
+
+
