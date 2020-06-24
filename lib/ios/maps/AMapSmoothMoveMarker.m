@@ -23,6 +23,7 @@
     BOOL _canShowCallout; //是否显示气泡
     BOOL _enabled;
     BOOL _enableListen;
+    BOOL _autoStart;
     NSInteger _zIndex;
     NSInteger _duration; //动画时间
 }
@@ -59,19 +60,21 @@
     }
     _annotation.coordinate = coords[0];
     if(_annotationView != nil) {
-        [_annotation addMoveAnimationWithKeyCoordinates:coords count:coordinates.count withDuration:_duration withName:nil completeCallback:^(BOOL isFinished) {
-           }stepCallback:^(MAAnnotationMoveAnimation *currentAni) {
-                currentStopLoc = currentAni;
-               if(_enableListen){
-                    _onMarkerMove(
-                       @{
-                            @"latitude": @(_annotation.coordinate.latitude),
-                            @"longitude":@(_annotation.coordinate.longitude),
-                        }
-                    );
-                }
-           }
-         ];
+        if(_autoStart){
+            [_annotation addMoveAnimationWithKeyCoordinates:coords count:coordinates.count withDuration:_duration withName:nil completeCallback:^(BOOL isFinished) {
+              }stepCallback:^(MAAnnotationMoveAnimation *currentAni) {
+                   currentStopLoc = currentAni;
+                  if(_enableListen){
+                       _onMarkerMove(
+                          @{
+                               @"latitude": @(_annotation.coordinate.latitude),
+                               @"longitude":@(_annotation.coordinate.longitude),
+                           }
+                       );
+                   }
+              }
+            ];
+        }
         // 保持地图旋转角度不变
         CGFloat ration = [_mapView getMapStatus].rotationDegree;
         MAMapRect rect = [_mapView visibleMapRect];
@@ -110,6 +113,10 @@
     _enableListen = enableListen;
 }
 
+- (void)setAutoStart:(BOOL)autostart {
+    _autoStart = autostart;
+}
+
 - (void)setStop {
     CLLocationCoordinate2D _stopCor = _annotation.coordinate;
     for(MAAnnotationMoveAnimation *animation in [_annotation allMoveAnimations]) {
@@ -128,7 +135,6 @@
         temp = currentStopLoc.passedPointCount;
     }
    CLLocationCoordinate2D coords[_coordinates.count - temp + 1];
-    NSLog(@"%i",_coordinates.count - temp + 1);
    for (NSUInteger i = 0; i < _coordinates.count - temp + 1; i++) {
        if(i==0){
            coords[i] = _annotation.coordinate;
@@ -162,7 +168,7 @@
         coords[i] = _coordinates[i].coordinate;
     }
     _annotation.coordinate = coords[0];
-   if(_annotationView != nil) {
+   if(_annotationView != nil && _autoStart) {
        [_annotation addMoveAnimationWithKeyCoordinates:coords count:_coordinates.count withDuration:_duration withName:nil completeCallback:^(BOOL isFinished) {
 
           }
@@ -258,21 +264,24 @@
         for (NSUInteger i = 0; i < _coordinates.count; i++) {
             coords[i] = _coordinates[i].coordinate;
         }
-        [_annotation addMoveAnimationWithKeyCoordinates:coords count:_coordinates.count withDuration:_duration withName:nil completeCallback:^(BOOL isFinished) {
+        if(_autoStart){
+            [_annotation addMoveAnimationWithKeyCoordinates:coords count:_coordinates.count withDuration:_duration withName:nil completeCallback:^(BOOL isFinished) {
 
-          } stepCallback:^(MAAnnotationMoveAnimation *currentAni) {
-               currentStopLoc = currentAni;
-              if(_enableListen){
-                  _onMarkerMove(
-                                 @{
-                                      @"latitude": @(_annotation.coordinate.latitude),
-                                      @"longitude":@(_annotation.coordinate.longitude),
-                                  }
-                  );
-              }
+              } stepCallback:^(MAAnnotationMoveAnimation *currentAni) {
+                   currentStopLoc = currentAni;
+                  if(_enableListen){
+                      _onMarkerMove(
+                                     @{
+                                          @"latitude": @(_annotation.coordinate.latitude),
+                                          @"longitude":@(_annotation.coordinate.longitude),
+                                      }
+                      );
+                  }
+            }
+             
+             ];
+
         }
-         
-         ];
         [self setActive:_active];
     }
     return _annotationView;
