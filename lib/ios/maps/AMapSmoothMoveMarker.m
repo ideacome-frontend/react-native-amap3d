@@ -133,8 +133,9 @@
 
 - (void)start {
    
-    if(currentStopLoc.passedPointCount >= 0 && currentStopLoc.passedPointCount<=_coordinates.count){
+    if(currentStopLoc!=nil && currentStopLoc.passedPointCount >= 0 && currentStopLoc.passedPointCount<=_coordinates.count){
         if(temp==0){
+            NSLog(@"%i",currentStopLoc.passedPointCount);
             temp = temp + currentStopLoc.passedPointCount;
         }else{
             temp = temp + currentStopLoc.passedPointCount - 1;
@@ -183,6 +184,7 @@
         coords[i] = _coordinates[i].coordinate;
     }
     temp = 0;
+    currentStopLoc = nil;
     _annotation.coordinate = coords[0];
    if(_annotationView != nil && _autoStart) {
        [_annotation addMoveAnimationWithKeyCoordinates:coords count:_coordinates.count withDuration:_duration withName:nil completeCallback:^(BOOL isFinished) {
