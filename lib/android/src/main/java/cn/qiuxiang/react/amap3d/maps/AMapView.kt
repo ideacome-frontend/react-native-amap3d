@@ -59,7 +59,7 @@ class AMapView(context: Context) : TextureMapView(context) {
         map.setOnMarkerClickListener { marker ->
             markers[marker.id]?.let {
                 it.active = true
-                emit(it.id, "onClick")
+                emit(it.id, "onPress")
             }
             true
         }
