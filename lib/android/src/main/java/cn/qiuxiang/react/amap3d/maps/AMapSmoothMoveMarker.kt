@@ -34,7 +34,7 @@ class AMapSmoothMoveMarker(context: Context) : ReactViewGroup(context), AMapOver
     private val counter = object : Runnable {
         var lastPoi: LatLng? = null
         override fun run() {
-            handlerTime.postDelayed(this, 60)
+            handlerTime.postDelayed(this, 16)
             if(mk!==null ){
                 val curPosition =  mk!!.position
                 if(curPosition != lastPoi){

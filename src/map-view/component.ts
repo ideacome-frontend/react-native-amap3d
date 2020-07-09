@@ -22,7 +22,10 @@ export default class Component<P> extends PureComponent<P> {
     const handle = findNodeHandle(this);
     if (handle) {
       const command = UIManager.getViewManagerConfig(this.nativeComponent).Commands[name];
-      UIManager.dispatchViewManagerCommand(handle, command, params);
+      try {
+        UIManager.dispatchViewManagerCommand(handle, command, params);
+      } catch (error) {
+      }
     }
   }
 
