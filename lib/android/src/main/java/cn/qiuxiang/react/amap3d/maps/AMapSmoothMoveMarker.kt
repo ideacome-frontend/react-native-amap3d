@@ -129,6 +129,11 @@ class AMapSmoothMoveMarker(context: Context) : ReactViewGroup(context), AMapOver
            handlerTime.post(counter)
         }
         val smoothMarker = MovingPointOverlay(map,marker)
+        Handler().postDelayed({
+            val drawable = context.resources.getIdentifier(name, "drawable", context.packageName)
+            bitmapDescriptor = BitmapDescriptorFactory.fromResource(drawable)
+            marker?.setIcon(bitmapDescriptor)
+        }, 200)
         this.smoothMarker = smoothMarker
         val drivePoint = points[0]
         val pair = calShortestDistancePoint(points, drivePoint)
