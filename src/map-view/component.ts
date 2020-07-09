@@ -20,9 +20,9 @@ export default class Component<P> extends PureComponent<P> {
    */
   call(name: string, params?: any[]) {
     const handle = findNodeHandle(this);
-    if (handle) {
-      const command = UIManager.getViewManagerConfig(this.nativeComponent).Commands[name];
+    if (handle) { 
       try {
+        const command = UIManager.getViewManagerConfig(this.nativeComponent).Commands[name];
         UIManager.dispatchViewManagerCommand(handle, command, params);
       } catch (error) {
       }
