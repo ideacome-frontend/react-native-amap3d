@@ -26,6 +26,7 @@
     BOOL _autoStart;
     NSInteger _zIndex;
     NSInteger _duration; //动画时间
+    CGFloat _offsetBottom;
     NSUInteger temp;
     CLLocationCoordinate2D _stopCor;
 }
@@ -37,6 +38,7 @@
     _enabled = YES;
     _canShowCallout = YES;
     _draggable = NO;
+    _offsetBottom = 0.2;
     temp = 0;
     self = [super init];
     return self;
@@ -44,6 +46,10 @@
 
 - (void)setDuration:(NSInteger)duration {
     _duration = duration;
+}
+
+- (void)setOffsetBottom:(CGFloat)offset {
+    _offsetBottom = offset;
 }
 
 - (void)setImage:(NSString *)name {
@@ -97,7 +103,6 @@
     [_mapBounds addObjectsFromArray:bounds];
     if(noFirstInit){
         MACoordinateRegion region =  [self getBounds];
-        [_mapView setRegion: region];
     }
 }
 
@@ -126,9 +131,6 @@
         [animation cancel];
     }
     [_annotation setCoordinate:_stopCor];
-//    if(currentStopLoc.passedPointCount !=nil && currentStopLoc.passedPointCount>0){
-//        [_annotation setCoordinate:_coordinates[currentStopLoc.passedPointCount-1].coordinate];
-//
 }
 
 - (void)start {
@@ -212,7 +214,11 @@
 - (void)setMapView:(AMapView *)mapView {
     _mapView = mapView;
     MACoordinateRegion region = [self getBounds];
-    [_mapView setRegion:region];
+//    UIEdgeInsets insets = UIEdgeInsetsMake(500,500, 500, 100);
+//    MAMapRect  rect = MAMapRectForCoordinateRegion([_mapView region]);
+//    MAMapRect rect1 = [_mapView mapRectThatFits:rect edgePadding:insets];
+//  [_mapView setVisibleMapRect:MAMapRectForCoordinateRegion(region) edgePadding:insets animated:YES];
+//    [_mapView setRegion:region];
 }
 
 - (void)_handleTap:(UITapGestureRecognizer *)recognizer {
@@ -244,11 +250,15 @@
                 minLat = _coor[i].coordinate.latitude;
             }
         }
-        CLLocationDegrees ofX =  ABS(maxLat - minLat) * 1.2;
-        CLLocationDegrees ofY = ABS(maxLng - minLng) * 1.2;
-        CLLocationCoordinate2D center = CLLocationCoordinate2DMake((maxLat + minLat)/2, (maxLng + minLng)/2);
-        MACoordinateSpan offset = MACoordinateSpanMake(ofX,ofY);
-        return MACoordinateRegionMake(center, offset);
+      UIEdgeInsets insets = UIEdgeInsetsMake(50,50, 50, 100);
+      CLLocationDegrees ofX =  ABS(maxLat - minLat);
+      CLLocationDegrees ofY = ABS(maxLng - minLng) * 1.2;
+      CGFloat bei =  1/(1/_offsetBottom -1 ); // ofx的多少倍
+      CLLocationCoordinate2D center = CLLocationCoordinate2DMake((maxLat + minLat)/2 - ofX * bei/2  , (maxLng + minLng)/2) ;
+      MACoordinateSpan offset = MACoordinateSpanMake(ofX*(1.1+bei),ofY);
+      MACoordinateRegion reg =   MACoordinateRegionMake(center, offset);
+      [_mapView setRegion:reg];
+      return reg;
 }
 
 - (MAAnnotationView *)annotationView {
@@ -307,7 +317,7 @@
 
 - (void)showsAllPoints {
     MAMapRect rect = MAMapRectZero;
-    UIEdgeInsets insets = UIEdgeInsetsMake(50,50, 50, 50);
+    UIEdgeInsets insets = UIEdgeInsetsMake(50,50, 50, _offsetBottom);
     for (Coordinate *myCoor in _coordinates) {
 
         ///annotation相对于中心点的对角线坐标

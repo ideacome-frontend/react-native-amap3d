@@ -22,6 +22,7 @@ RCT_EXPORT_VIEW_PROPERTY(image, NSString)
 RCT_EXPORT_VIEW_PROPERTY(enableListen, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(autoStart, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(onMarkerMove, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(offsetBottom,CGFloat)
 
 
 RCT_EXPORT_METHOD(lockToScreen:(nonnull NSNumber *)reactTag x:(int)x y:(int)y) {

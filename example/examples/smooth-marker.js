@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Alert, TouchableOpacity, View, Text } from "react-native";
+import { StyleSheet, Alert, TouchableOpacity, View, Text, Platform } from "react-native";
 import { MapView } from "react-native-amap3d";
 
 export default class SmoothMarkerExample extends Component {
@@ -66,6 +66,7 @@ export default class SmoothMarkerExample extends Component {
               console.log(position);
             }}
             bounds={this._line4}
+            offsetBottom={ Platform.OS==='android' ? 400 : 0.3333}
           />
         </MapView>
         <View style={styles.buttons}>

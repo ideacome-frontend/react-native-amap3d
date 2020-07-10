@@ -28,6 +28,7 @@ class AMapSmoothMoveMarker(context: Context) : ReactViewGroup(context), AMapOver
     private var smoothMarker: MovingPointOverlay? = null
     private var bitmapDescriptor: BitmapDescriptor? = null
     private  var totalDutation : Int = 40
+    var offsetBottom :Int = 50
     private var coordinates: ArrayList<LatLng> = ArrayList()
     private var bounds: ArrayList<LatLng> = ArrayList()
     private val handlerTime = Handler()
@@ -60,7 +61,7 @@ class AMapSmoothMoveMarker(context: Context) : ReactViewGroup(context), AMapOver
         if(bounds.size>0){
             val tBounds = this.getLatLngBounds(list)
             val beras:Float = _map!!.cameraPosition.bearing
-            _map!!.moveCamera(CameraUpdateFactory.newLatLngBounds(tBounds, 50))
+            _map!!.moveCamera(CameraUpdateFactory.newLatLngBoundsRect(tBounds, 50,50,50,offsetBottom))
             _map!!.moveCamera(CameraUpdateFactory.changeBearing(beras))
         }
         this.bounds = list;
@@ -130,7 +131,7 @@ class AMapSmoothMoveMarker(context: Context) : ReactViewGroup(context), AMapOver
         }else{
             tBounds = points
         }
-        map.animateCamera(CameraUpdateFactory.newLatLngBounds(getLatLngBounds(tBounds), 50))
+        map.animateCamera(CameraUpdateFactory.newLatLngBoundsRect(getLatLngBounds(tBounds), 50,50,50,offsetBottom))
         val marker = map.addMarker(MarkerOptions().icon(bitmapDescriptor))
         this.mk = marker
         if(enableListen){
@@ -166,7 +167,7 @@ class AMapSmoothMoveMarker(context: Context) : ReactViewGroup(context), AMapOver
             if (_map== null) return
             val bounds = getLatLngBounds(_map!!.cameraPosition.target, coordinates)
             val beras:Float = _map!!.cameraPosition.bearing
-            _map!!.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50))
+            _map!!.moveCamera(CameraUpdateFactory.newLatLngBoundsRect(bounds, 50,50,50,offsetBottom))
             _map!!.moveCamera(CameraUpdateFactory.changeBearing(beras))
         }
     }
@@ -192,7 +193,7 @@ class AMapSmoothMoveMarker(context: Context) : ReactViewGroup(context), AMapOver
         if (  coordinates.isNotEmpty()) {
             if (_map == null) return
             val bounds = getLatLngBounds(coordinates)
-            _map!!.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50))
+            _map!!.moveCamera(CameraUpdateFactory.newLatLngBoundsRect(bounds, 50,50,50,offsetBottom))
         }
     }
 

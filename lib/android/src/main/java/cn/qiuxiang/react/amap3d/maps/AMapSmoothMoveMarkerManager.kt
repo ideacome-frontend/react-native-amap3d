@@ -52,6 +52,12 @@ internal class AMapSmoothMoveMarkerManager : ViewGroupManager<AMapSmoothMoveMark
         smoothMoveMarker.setTotalDuration(duration)
     }
 
+
+    @ReactProp(name = "offsetBottom")
+    fun setOffsetBottom(smoothMoveMarker: AMapSmoothMoveMarker,offset: Int) {
+        smoothMoveMarker.offsetBottom = offset
+    }
+
     companion object {
         const val START = 1
         const val STOP = 2

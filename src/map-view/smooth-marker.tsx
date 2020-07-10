@@ -17,6 +17,7 @@ export interface SmoothMoveMarkerProps {
   restart?: (autoStart: boolean) => void;
   autoStart?: boolean;
   enableListen?: boolean;
+  offsetBottom?:number;
 }
 
 const events = ["onMarkerMove"];

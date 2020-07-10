@@ -14,6 +14,7 @@ export interface SmoothMoveMarkerProps {
     restart?: (autoStart: boolean) => void;
     autoStart?: boolean;
     enableListen?: boolean;
+    offsetBottom?: number;
 }
 /**
  * @ignore
