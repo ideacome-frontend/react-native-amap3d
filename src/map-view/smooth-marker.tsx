@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as PropTypes from "prop-types";
-import { requireNativeComponent, ViewPropTypes, Platform } from "react-native";
+import { requireNativeComponent, ViewPropTypes, Platform ,PixelRatio} from "react-native";
 import { LatLng } from "../types";
 import { LatLngPropType } from "../prop-types";
 import Component from "./component";
@@ -62,6 +62,9 @@ export default class SmoothMoveMarker extends Component<SmoothMoveMarkerProps>{
       mapBounds:this.props.bounds || [],
       ...this.handlers(events)
     };
+    if(this.props.offsetBottom){
+      props.offsetBottom = PixelRatio.getPixelSizeForLayoutSize(this.props.offsetBottom) + 50
+    }
     return <AMapSmoothMoveMarker {...props  } />
   }
 }
