@@ -62,13 +62,15 @@ internal class AMapSmoothMoveMarkerManager : ViewGroupManager<AMapSmoothMoveMark
         const val START = 1
         const val STOP = 2
         const val RESTART = 3
+        const val FITMAPBOUNDS = 4
     }
 
     override fun getCommandsMap(): Map<String, Int> {
         return mapOf(
                 "start" to START,
                 "stop" to STOP,
-                "restart" to RESTART
+                "restart" to RESTART,
+                "fitMapBounds" to FITMAPBOUNDS
         )
     }
 
@@ -77,6 +79,7 @@ internal class AMapSmoothMoveMarkerManager : ViewGroupManager<AMapSmoothMoveMark
             START -> smoothMoveMarker.startSmoothMove()
             STOP -> smoothMoveMarker.stopMove()
             RESTART -> smoothMoveMarker.reStartMove(args)
+            FITMAPBOUNDS -> smoothMoveMarker.fitMapBounds()
         }
     }
 }

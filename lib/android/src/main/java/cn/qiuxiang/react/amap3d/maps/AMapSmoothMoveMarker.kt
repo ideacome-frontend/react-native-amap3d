@@ -112,6 +112,10 @@ class AMapSmoothMoveMarker(context: Context) : ReactViewGroup(context), AMapOver
         smoothMarker?.startSmoothMove()
     }
 
+    fun fitMapBounds(){
+        _map?.animateCamera(CameraUpdateFactory.newLatLngBoundsRect(getLatLngBounds(bounds), 50,50,50,offsetBottom))
+    }
+
     fun reStartMove( args: ReadableArray?){
        smoothMarker?.setPoints(subList)
         if(args!==null){
