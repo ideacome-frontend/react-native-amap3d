@@ -87,7 +87,7 @@ export default class SmoothMoveMarker extends Component<SmoothMoveMarkerProps> {
     nativeComponent: string;
     start(): void;
     stop(): void;
-    setMapBounds(): void;
+    fitMapBounds(): void;
     restart(autoStart?: boolean): void;
     render(): JSX.Element;
 }

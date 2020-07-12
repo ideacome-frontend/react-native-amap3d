@@ -108,6 +108,10 @@
     }
 }
 
+- (void)fitMapBounds{
+     MACoordinateRegion region =  [self getBounds];
+}
+
 - (void)setActive:(BOOL)active {
     _active = active;
     dispatch_async(dispatch_get_main_queue(), ^{
