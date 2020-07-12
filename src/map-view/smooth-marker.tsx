@@ -41,6 +41,9 @@ export default class SmoothMoveMarker extends Component<SmoothMoveMarkerProps>{
     console.log("调用停止方法");
     this.call("stop");
   }
+  setMapBounds(){
+    this.call("setMapBounds");
+  }
   restart(autoStart = false) {
     if(Platform.OS==='ios'){
       // ios 默认restart

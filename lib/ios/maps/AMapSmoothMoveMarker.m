@@ -29,6 +29,7 @@
     CGFloat _offsetBottom;
     NSUInteger temp;
     CLLocationCoordinate2D _stopCor;
+    NSInteger initCount;
 }
 // MAAnimatedAnnotation
 - (instancetype)init {
@@ -40,6 +41,7 @@
     _draggable = NO;
     _offsetBottom = 0.2;
     temp = 0;
+    initCount = 0;
     self = [super init];
     return self;
 }
@@ -212,8 +214,12 @@
 }
 
 - (void)setMapView:(AMapView *)mapView {
-    _mapView = mapView;
-    MACoordinateRegion region = [self getBounds];
+    if(initCount==0){
+        _mapView = mapView;
+        MACoordinateRegion region = [self getBounds];
+        initCount ++;
+        NSLog(@"这个方法仅允许一次");
+    }
 //    UIEdgeInsets insets = UIEdgeInsetsMake(500,500, 500, 100);
 //    MAMapRect  rect = MAMapRectForCoordinateRegion([_mapView region]);
 //    MAMapRect rect1 = [_mapView mapRectThatFits:rect edgePadding:insets];

@@ -18,5 +18,6 @@
 - (void)restart;
 - (void)setMapView:(AMapView *)mapView;
 - (void)lockToScreen:(int)x y:(int)y;
+- (void)setMapBounds;
 
 @end

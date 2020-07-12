@@ -44,6 +44,12 @@ RCT_EXPORT_METHOD(start:(nonnull NSNumber *)reactTag) {
         [marker start];
     }];
 }
+RCT_EXPORT_METHOD(setMapBounds:(nonnull NSNumber *)reactTag) {
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        AMapSmoothMoveMarker *marker = (AMapSmoothMoveMarker *) viewRegistry[reactTag];
+        [marker setMapBounds];
+    }];
+}
 RCT_EXPORT_METHOD(restart:(nonnull NSNumber *)reactTag) {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         AMapSmoothMoveMarker *marker = (AMapSmoothMoveMarker *) viewRegistry[reactTag];
