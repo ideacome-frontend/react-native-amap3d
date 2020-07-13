@@ -62,7 +62,7 @@ export default class SmoothMoveMarker extends Component<SmoothMoveMarkerProps>{
       mapBounds:this.props.bounds || [],
       ...this.handlers(events)
     };
-    if(this.props.offsetBottom){
+    if(this.props.offsetBottom && Platform.OS==='android'){
       props.offsetBottom = PixelRatio.getPixelSizeForLayoutSize(this.props.offsetBottom) + 50
     }
     return <AMapSmoothMoveMarker {...props  } />
