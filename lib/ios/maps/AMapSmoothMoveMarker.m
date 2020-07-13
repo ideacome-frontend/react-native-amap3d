@@ -80,6 +80,7 @@
                           @{
                                @"latitude": @(_annotation.coordinate.latitude),
                                @"longitude":@(_annotation.coordinate.longitude),
+                               @"passIndex":@(currentAni.passedPointCount),
                            }
                        );
                    }
@@ -178,6 +179,7 @@
                     @{
                          @"latitude": @(_annotation.coordinate.latitude),
                          @"longitude":@(_annotation.coordinate.longitude),
+                         @"passIndex":@(temp +  currentAni.passedPointCount -2),
                      }
                  );
              }
@@ -205,6 +207,7 @@
                     @{
                          @"latitude": @(_annotation.coordinate.latitude),
                          @"longitude":@(_annotation.coordinate.longitude),
+                         @"passIndex":@(currentAni.passedPointCount),
                      }
                  );
              }
@@ -312,6 +315,7 @@
                                      @{
                                           @"latitude": @(_annotation.coordinate.latitude),
                                           @"longitude":@(_annotation.coordinate.longitude),
+                                          @"passIndex":@(currentAni.passedPointCount),
                                       }
                       );
                   }

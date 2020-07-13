@@ -2,6 +2,7 @@ package cn.qiuxiang.react.amap3d.maps
 
 import android.content.Context
 import android.os.Handler
+import android.util.Log
 import cn.qiuxiang.react.amap3d.toLatLngList
 import cn.qiuxiang.react.amap3d.toWritableMap
 import com.amap.api.maps.AMap
@@ -36,11 +37,17 @@ class AMapSmoothMoveMarker(context: Context) : ReactViewGroup(context), AMapOver
         var lastPoi: LatLng? = null
         override fun run() {
             handlerTime.postDelayed(this, 16)
-            if(mk!==null ){
-                val curPosition =  mk!!.position
+            if(mk!==null && smoothMarker!==null ){
+               // Log.d("当前index", smoothMarker?.index.toString())
+               // Log.d("当前index", smoothMarker?.position.toString())
+                val curPosition =  smoothMarker!!.position
                 if(curPosition != lastPoi){
-                    val map =   curPosition.toWritableMap()
-                    emit(id, "onMarkerMove", map)
+                    val map2 = Arguments.createMap()
+                    map2.putDouble("latitude",curPosition.latitude)
+                    map2.putDouble("longitude", curPosition.longitude)
+                    smoothMarker?.index?.let { map2.putInt(("passIndex"), it) }
+//                    val map =   curPosition.toWritableMap()
+                    emit(id, "onMarkerMove", map2)
                     lastPoi = curPosition
                 }
             }
