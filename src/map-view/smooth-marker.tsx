@@ -41,7 +41,7 @@ export default class SmoothMoveMarker extends Component<SmoothMoveMarkerProps>{
     console.log("调用停止方法");
     this.call("stop");
   }
-  fitMapBoundsc(){
+  fitMapBounds(){
     this.call("fitMapBounds");
   }
   restart(autoStart = false) {
