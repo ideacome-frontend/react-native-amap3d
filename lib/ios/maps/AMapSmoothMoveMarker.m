@@ -101,9 +101,9 @@
 }
 
 - (void)setMapBounds:(NSArray<Coordinate *> *)bounds {
-    BOOL noFirstInit = _mapBounds.count>0;
     [_mapBounds removeAllObjects];
     [_mapBounds addObjectsFromArray:bounds];
+    BOOL noFirstInit = _mapBounds.count>0;
     if(noFirstInit){
         MACoordinateRegion region =  [self getBounds];
     }
